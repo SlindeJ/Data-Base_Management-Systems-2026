@@ -64,7 +64,35 @@ end $$
 delimiter ; 
 
 */
-	
+	// classInfo21:
+	/*
+	delimiter $$
+drop procedure if exists getClassInfo21;
+create procedure getClassInfo21(INOUT classList varchar(4000))
+begin
+declare isDone integer default 0;
+declare currentClass varchar(255) default "";
+declare currentMeet varchar(255) default "";
+declare currentRoom varchar(255) default "";
+declare classCursor cursor for
+select cname, meets_at, room from class;
+declare continue handler
+for not found set isDone = 1;
+open classCursor;
+getList: loop
+fetch classCursor into currentClass, currentMeet, currentRoom;
+if isDone = 1 then
+leave getList;
+end if;
+set classList = concat("","\n", classList);
+set classList = concat(currentRoom,"\t", classList);
+set classList = concat(currentMeet,"\t", classList);
+set classList = concat(currentClass,"\t\t", classList);
+end loop getList;
+close classCursor;
+end $$
+delimiter ;
+	 */
 	
 public static void main(String args[]) {
 
