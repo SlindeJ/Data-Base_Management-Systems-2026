@@ -1,0 +1,70 @@
+Checkpoint 3 | Book Recommendation System | Group 6
+
+WASHINGTON THROUGH PuTTY
+1. Transfer Checkpoint_3_Code_and_Data.zip to your Washington home directory
+   with your usual course file-transfer tool (for example, WinSCP).
+2. Log in to Washington with PuTTY. At the Linux shell, run:
+   unzip Checkpoint_3_Code_and_Data.zip
+   cd checkpoint3
+   ls data/*.csv
+   mysql --default-character-set=utf8mb4 --local-infile=1 -u slindejs08 -p cs366-2267_slindejs08
+   Enter the MariaDB password when prompted. A teammate should use their own
+   assigned login and database. Keep PuTTY in this folder so data/ resolves.
+3. At the MariaDB prompt:
+   SELECT DATABASE(), VERSION();
+   SHOW TABLES;
+   Use 01 and 02 once for a fresh set of project tables. If these project table
+   names already exist, check the group's existing schema and counts first.
+   If they are already populated and match, skip 01 and 02. Other class tables
+   such as Student and Faculty can coexist with these project tables.
+
+   SOURCE 01_create_tables.sql;
+   SOURCE 02_load.sql;
+   SOURCE 04_procedures.sql;
+   SOURCE 03_queries.sql;
+   SOURCE 06_demo.sql;
+
+   The CREATE scripts define new objects. Run each creation script once.
+   No script drops an existing table or procedure. If setup reports an error,
+   resolve it before starting the next file. The loader prints warnings and
+   all nine row counts. Expected counts are in the Word report. If LOCAL
+   INFILE is disabled on the server, ask the instructor about the course
+   import setting. No administrative privileges are needed by the scripts
+   beyond the course database's usual table and routine permissions.
+
+4. For a Washington baseline, before adding extra indexes, run:
+   tee washington_baseline.txt
+   SOURCE 05_baseline.sql;
+   notee
+   This runs Q1, Q3, Q4, Q5 and Q10 four times apiece and prints EXPLAIN and
+   SHOW PROFILES. For each set, discard the first SELECT duration and take
+   the median of the next three. Ignore durations for EXPLAIN. Rerun this file
+   on the same data and host after adding indexes in Checkpoint 4.
+
+JAVA IN INTELLIJ
+Use the same network connection or tunnel and working JDBC host/port as Lab 2.
+Put BookApp.java under your project's src directory. The class has no package
+declaration. In File > Project Structure > Modules > Dependencies, add your
+mariadb-java-client-2.6.2.jar if it is not already listed. Apply and run
+BookApp.main. The program asks for a JDBC URL, DB username and DB password.
+Use a reader ID from the user table in the app. Reader IDs are separate from
+the MariaDB login. Enter a book ID from the search results before changing it.
+The UI commits real edits on its connection. Use the rollback-based 06_demo.sql
+for a temporary SQL demonstration.
+
+FILES
+data/                 Nine cleaned CSVs, ready for 02_load.sql.
+prepare_csvs.py       Optional rebuild from the eight original project CSVs.
+                      Example: python prepare_csvs.py original_csvs data
+01_create_tables.sql  Nine tables and their constraints.
+02_load.sql           Lab 1 style CSV import and row counts.
+03_queries.sql        Ten numbered Level 2 queries used in the report.
+04_procedures.sql     Five server-side stored procedures.
+05_baseline.sql       Repeatable timing and EXPLAIN capture.
+06_demo.sql           Exercise stored procedures and roll back the test reader.
+BookApp.java          Search, insert, change, delete and view through JDBC.
+evidence/             Full query results and baseline plans from local MySQL 8.0.46.
+
+Keep the file names lowercase, as provided. SQL files use plain quotes.
+The data/ CSVs use UTF-8 and LF line endings. Transfer the ZIP as a binary file
+and extract it on Washington to preserve those line endings.
