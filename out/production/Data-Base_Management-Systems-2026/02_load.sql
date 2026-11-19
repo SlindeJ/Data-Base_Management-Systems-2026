@@ -1,0 +1,87 @@
+-- Use with the supplied data directory and empty project tables.
+START TRANSACTION;
+
+LOAD DATA LOCAL INFILE 'data/author.csv' INTO TABLE author
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(author_id, author_name);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/publisher.csv' INTO TABLE publisher
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(publisher_id, publisher_name);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/tag.csv' INTO TABLE tag
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(tag_id, tag_name);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/user.csv' INTO TABLE `user`
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(user_id, user_name);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/book.csv' INTO TABLE book
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(book_id, title, @yr, @lang, @pub)
+SET publication_year = NULLIF(@yr, ''),
+    language_code = NULLIF(@lang, ''), publisher_id = NULLIF(@pub, '');
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/book_author.csv' INTO TABLE book_author
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(book_id, author_id);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/rating.csv' INTO TABLE rating
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(user_id, book_id, rating);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/book_tag.csv' INTO TABLE book_tag
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(book_id, tag_id, tag_count);
+SHOW WARNINGS LIMIT 5;
+
+LOAD DATA LOCAL INFILE 'data/reading_list.csv' INTO TABLE reading_list
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\n' IGNORE 1 LINES
+(user_id, book_id, @added)
+SET date_added = NULLIF(@added, '');
+SHOW WARNINGS LIMIT 5;
+
+COMMIT;
+SELECT 'author' AS table_name, COUNT(*) AS row_count FROM author
+UNION ALL
+SELECT 'publisher', COUNT(*) FROM publisher
+UNION ALL
+SELECT 'tag', COUNT(*) FROM tag
+UNION ALL
+SELECT 'user', COUNT(*) FROM `user`
+UNION ALL
+SELECT 'book', COUNT(*) FROM book
+UNION ALL
+SELECT 'book_author', COUNT(*) FROM book_author
+UNION ALL
+SELECT 'rating', COUNT(*) FROM rating
+UNION ALL
+SELECT 'book_tag', COUNT(*) FROM book_tag
+UNION ALL
+SELECT 'reading_list', COUNT(*) FROM reading_list;

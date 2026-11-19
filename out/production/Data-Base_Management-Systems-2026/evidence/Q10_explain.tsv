@@ -1,0 +1,3 @@
+id	select_type	table	partitions	type	possible_keys	key	key_len	ref	rows	filtered	Extra
+1	SIMPLE	b	NULL	index	NULL	PRIMARY	4	NULL	20	100.00	NULL
+1	SIMPLE	r	NULL	eq_ref	PRIMARY,book_id	PRIMARY	8	const,cp3_verify.b.book_id	1	100.00	Using where; Not exists; Using index
