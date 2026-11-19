@@ -101,7 +101,7 @@ public class BookApp extends JPanel {
             }
         }
     }
-
+// for Jacob use jdbc:mariadb://127.0.0.1:3307/cs366-2267_slindejs08
     public static void main(String[] args) {
         String url = JOptionPane.showInputDialog("JDBC URL (use your working Lab 2 host and port)",
                 "jdbc:mariadb://192.168.100.174:3306/cs366-2267_slindejs08");
